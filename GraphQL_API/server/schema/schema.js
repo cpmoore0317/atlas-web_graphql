@@ -28,6 +28,17 @@ const TaskType = new GraphQLObjectType({
   },
 });
 
+// Define the TaskType object
+const ProjectType = new GraphQLObjectType({
+  name: 'Project',
+  fields: {
+    id: { type: GraphQLString },
+    title: { type: GraphQLString },
+    weight: { type: GraphQLInt },
+    description: { type: GraphQLString },
+  },
+});
+
 // Define the Root Query
 const RootQuery = new GraphQLObjectType({
   name: 'RootQueryType',
