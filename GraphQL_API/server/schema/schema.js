@@ -35,6 +35,7 @@ const projects = [
   }
 ];
 
+// Define TaskType
 const TaskType = new GraphQLObjectType({
   name: 'Task',
   fields: () => ({
@@ -51,6 +52,7 @@ const TaskType = new GraphQLObjectType({
   })
 });
 
+// Define ProjectType
 const ProjectType = new GraphQLObjectType({
   name: 'Project',
   fields: () => ({
@@ -67,6 +69,7 @@ const ProjectType = new GraphQLObjectType({
   })
 });
 
+// Define RootQuery
 const RootQuery = new GraphQLObjectType({
   name: 'RootQueryType',
   fields: {
@@ -83,12 +86,23 @@ const RootQuery = new GraphQLObjectType({
       resolve(parent, args) {
         return _.find(projects, { id: args.id });
       }
+    },
+    tasks: {
+      type: new GraphQLList(TaskType),
+      resolve(parent, args) {
+        return tasks;
+      }
+    },
+    projects: {
+      type: new GraphQLList(ProjectType),
+      resolve(parent, args) {
+        return projects;
+      }
     }
   }
 });
 
-const schema = new GraphQLSchema({
+// Export schema
+module.exports = new GraphQLSchema({
   query: RootQuery
 });
-
-module.exports = schema;
