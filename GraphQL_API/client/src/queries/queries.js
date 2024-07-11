@@ -35,3 +35,25 @@ export const addProjectMutation = gql`
     }
   }
 `;
+
+export const getTaskDetailQuery = gql`
+  query($id: ID!) {
+    task(id: $id) {
+      id
+      title
+      weight
+      description
+      project {
+        id
+        title
+        weight
+        description
+        tasks {
+          id
+          title
+          weight
+        }
+      }
+    }
+  }
+`;

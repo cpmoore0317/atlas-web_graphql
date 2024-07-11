@@ -1,16 +1,22 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { graphql } from 'react-apollo';
+import { flowRight as compose } from 'lodash';
 import { getTasksQuery } from '../queries/queries';
+import TaskDetails from './TaskDetails';
 
 function TaskList(props) {
+  const [state, setState] = useState({
+    selected: null
+  });
+
   function displayTasks() {
-    var data = props.data;
+    var data = props.getTasksQuery;
     if (data.loading) {
       return <div>Loading tasks...</div>;
     } else {
       return data.tasks.map(task => {
         return (
-          <li key={task.id} onClick={(e) => { setState({ selected: task.id }); }}>
+          <li key={task.id} onClick={(e) => setState({ selected: task.id })}>
             {task.title}
           </li>
         );
@@ -23,8 +29,11 @@ function TaskList(props) {
       <ul id="task-list">
         {displayTasks()}
       </ul>
+      <TaskDetails taskId={state.selected} />
     </div>
   );
 }
 
-export default graphql(getTasksQuery)(TaskList);
+export default compose(
+  graphql(getTasksQuery, { name: 'getTasksQuery' })
+)(TaskList);
