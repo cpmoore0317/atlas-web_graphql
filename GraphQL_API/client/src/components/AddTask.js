@@ -1,19 +1,17 @@
-import React, { Component } from 'react';
-import { gql } from 'apollo-boost';
+import React, { useState } from 'react';
 import { graphql } from 'react-apollo';
+import { getProjectsQuery } from '../queries/queries';
 
-const getProjectsQuery = gql`
-  {
-    projects {
-      id
-      title
-    }
-  }
-`;
+function AddTask(props) {
+  const [state, setState] = useState({
+    title: '',
+    weight: 0,
+    description: '',
+    projectId: ''
+  });
 
-function displayProjects(props) {
+  function displayProjects() {
     var data = props.data;
-  
     if (data.loading) {
       return <option>Loading projects...</option>;
     } else {
@@ -27,21 +25,30 @@ function displayProjects(props) {
     }
   }
 
-  class AddTask extends Component {
-    render() {
-      return (
-        <form>
-          <div className="field">
-            <label>Project:</label>
-            <select>
-              {displayProjects(this.props)}
-            </select>
-          </div>
-          {/* Add other form fields here */}
-        </form>
-      );
-    }
-  }
-  
-  export default graphql(getProjectsQuery)(AddTask);
-  
+  return (
+    <form id="add-task">
+      <div className="field">
+        <label>Task title:</label>
+        <input type="text" onChange={(e) => setState({ ...state, title: e.target.value })} />
+      </div>
+      <div className="field">
+        <label>Weight:</label>
+        <input type="number" onChange={(e) => setState({ ...state, weight: parseInt(e.target.value) })} />
+      </div>
+      <div className="field">
+        <label>Description:</label>
+        <input type="text" onChange={(e) => setState({ ...state, description: e.target.value })} />
+      </div>
+      <div className="field">
+        <label>Project:</label>
+        <select onChange={(e) => setState({ ...state, projectId: e.target.value })}>
+          <option>Select project</option>
+          {displayProjects()}
+        </select>
+      </div>
+      <button>+</button>
+    </form>
+  );
+}
+
+export default graphql(getProjectsQuery)(AddTask);

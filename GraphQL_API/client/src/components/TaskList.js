@@ -1,26 +1,16 @@
 import React from 'react';
-import { gql } from 'apollo-boost';
 import { graphql } from 'react-apollo';
+import { getTasksQuery } from '../queries/queries';
 
-const getTasksQuery = gql`
-  {
-    tasks {
-      id
-      title
-    }
-  }
-`;
-
-function displayTasks(props) {
-    console.log(props.data);
+function TaskList(props) {
+  function displayTasks() {
     var data = props.data;
-  
     if (data.loading) {
       return <div>Loading tasks...</div>;
     } else {
       return data.tasks.map(task => {
         return (
-          <li key={task.id} onClick={(e) => { this.setState({ selected: task.id }); }}>
+          <li key={task.id} onClick={(e) => { setState({ selected: task.id }); }}>
             {task.title}
           </li>
         );
@@ -28,17 +18,13 @@ function displayTasks(props) {
     }
   }
 
-  class TaskList extends React.Component {
-    render() {
-      return (
-        <div>
-          <ul>
-            {displayTasks(this.props)}
-          </ul>
-        </div>
-      );
-    }
-  }
-  
-  export default graphql(getTasksQuery)(TaskList);
-  
+  return (
+    <div>
+      <ul id="task-list">
+        {displayTasks()}
+      </ul>
+    </div>
+  );
+}
+
+export default graphql(getTasksQuery)(TaskList);
